@@ -10,6 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 import * as GraphQLUpload from 'graphql-upload/GraphQLUpload.js'
 import { join } from 'path';
 import { createWriteStream, existsSync, mkdirSync } from 'fs';
+import { Member, MemberRole } from 'src/member/member.types';
 
 
 @UseGuards(GraphqlAuthGuard)
@@ -114,6 +115,44 @@ export class ServerResolver {
             return await this.serverService.deleteServer(serverId, ctx.req.profile.email)
         } catch (error) {
             throw new BadRequestException(error.message)
+        }
+    }
+
+    @Mutation(() => Server)
+    async addMemberToServer(@Args('inviteCode') inviteCode: string, @Context() ctx: { req: Request }) {
+        try {
+            return await this.serverService.addMemberToServer(inviteCode, ctx.req.profile.email)
+        } catch (error) {
+            throw new BadRequestException(error.message)
+        }
+    }
+
+    @Mutation(() => Member)
+    async changeMemberRole(
+        @Args('memberId', { nullable: true }) memberId: number,
+        @Args('role') role: MemberRole,
+        @Context() ctx: { req: Request },
+    ) {
+        try {
+            return this.serverService.changeMemberRole(
+                memberId,
+                role,
+                ctx.req?.profile.email,
+            );
+        } catch (err) {
+            throw new BadRequestException(err.message);
+        }
+    }
+
+    @Mutation(() => Member)
+    async deleteMember(
+        @Args('memberId', { nullable: true }) memberId: number,
+        @Context() ctx: { req: Request },
+    ) {
+        try {
+            return this.serverService.deleteMember(memberId, ctx.req?.profile.email);
+        } catch (err) {
+            throw new BadRequestException(err.message, err.code);
         }
     }
 

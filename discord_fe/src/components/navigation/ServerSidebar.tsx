@@ -17,7 +17,7 @@ function ServerSidebar() {
     if (!channelId && !memberId && textChannels.length) {
       navigate(`/servers/${serverId}/channels/TEXT/${textChannels[0]?.id}`)
     }
-  }, [channelId, memberId, serverId])
+  })
 
   const [activeMemberId, setActiveMemberId] = React.useState<number | null>()
   const [activeChannelId, setActiveChanneId] = React.useState<number | null>()

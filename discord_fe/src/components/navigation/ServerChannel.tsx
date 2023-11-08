@@ -1,9 +1,10 @@
 
 import { Channel, ChannelType, MemberRole, Server } from '../../gql/graphql'
-import { IconCamera, IconHash, IconMessage, IconMicrophone } from '@tabler/icons-react'
+import { IconCamera, IconHash, IconMessage, IconMicrophone, IconTrash } from '@tabler/icons-react'
 import useModal from '../../hooks/useModal'
 import { useNavigate } from 'react-router-dom'
 import { NavLink, Stack, rem } from '@mantine/core'
+import { useGeneralStore } from '../../stores/generateStore'
 
 type ServerChannelProps = {
     channel: Channel | null,
@@ -13,9 +14,9 @@ type ServerChannelProps = {
 }
 
 const iconMap = {
-    [ChannelType.Text]: <IconHash size={15}/>,
-    [ChannelType.Audio]: <IconMicrophone size={15}/>,
-    [ChannelType.Video]: <IconCamera size={15}/>
+    [ChannelType.Text]: <IconHash size={15} />,
+    [ChannelType.Audio]: <IconMicrophone size={15} />,
+    [ChannelType.Video]: <IconCamera size={15} />
 }
 
 const ServerChannel = (props: ServerChannelProps) => {
@@ -23,6 +24,9 @@ const ServerChannel = (props: ServerChannelProps) => {
     const Icon = iconMap[props.channel.type];
     const deleteChannel = useModal('DeleteChannel');
     const updateChannel = useModal('UpdateChannel');
+
+    const setChannelToBeDeleteOrUpdateId = useGeneralStore((state) => state.setChannelToBeDeleteOrUpdateId)
+
     const navigate = useNavigate();
     if (props.channel.name != 'general') {
         return (
@@ -35,9 +39,16 @@ const ServerChannel = (props: ServerChannelProps) => {
                 {props.role != MemberRole.Guest && (
                     <Stack>
                         <NavLink
-                        label='join'
-                        rightSection={<IconMessage size={15}/>}
-                        onClick={() => navigate(`/servers/${props.server.id}/channels/${props.channel?.type}/${props.channel?.id}`)}/>
+                            label='Join'
+                            rightSection={<IconMessage size={15} />}
+                            onClick={() => navigate(`/servers/${props.server.id}/channels/${props.channel?.type}/${props.channel?.id}`)} />
+                        <NavLink
+                            label='Delete'
+                            rightSection={<IconTrash size={15} />}
+                            onClick={() => {
+                                setChannelToBeDeleteOrUpdateId(Number(props.channel?.id))
+                                deleteChannel.openModal()
+                            }} />
                     </Stack>
                 )}
             </NavLink>

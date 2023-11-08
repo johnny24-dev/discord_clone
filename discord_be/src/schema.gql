@@ -56,10 +56,13 @@ enum MemberRole {
 }
 
 type Mutation {
+  addMemberToServer(inviteCode: String!): Server!
+  changeMemberRole(memberId: Float, role: String!): Member!
   createChannel(input: CreateChannelOnServerDto!): Server!
   createProfile(input: CreateProfileDto!): Profile!
   createServer(file: Upload, input: CreateServerDto!): Server!
   deleteChannelFromServer(channelId: Float!): Channel!
+  deleteMember(memberId: Float): Member!
   deleteServer(serverId: Float!): Server!
   leaveServer(serverId: Float!): Server!
   updateServer(file: Upload, input: UpdateServerDto!): Server!

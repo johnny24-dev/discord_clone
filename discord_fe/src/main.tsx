@@ -11,11 +11,15 @@ import CreateServerModal from './components/modals/CreateServerModal.tsx';
 
 import { ApolloProvider } from '@apollo/client'
 import client from './apolloClient.ts';
-import CreateChannelModal from './components/modals/CreateChannelModal.tsx';
+import CreateChannelModal from './components/modals/server/channel/CreateChannelModal.tsx';
 import ChannelLayout from './layouts/ChannelLayout.tsx';
 import ChannelPage from './pages/ChannelPage.tsx';
 import InviteModal from './components/modals/server/InviteModal.tsx';
 import UpdateServerModal from './components/modals/server/UpdateServerModal.tsx';
+import LeaveServerModal from './components/modals/server/LeaveServerModal.tsx';
+import DeleteChannelModal from './components/modals/server/channel/DeleteChannelModal.tsx';
+import DeleteServerModal from './components/modals/server/DeleteServerModal.tsx';
+import ServerJoinModal from './components/modals/server/ServerJoinModal.tsx';
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -43,18 +47,19 @@ const RouterComponent = () => {
             element={
               <ProtectedRoute>
                 <CreateServerModal />
+                <ServerJoinModal/>
                 <HomePage />
               </ProtectedRoute>
             } />
         </Route>
-            
+
         <Route path="servers/:serverId/" element={<ChannelLayout />}>
           <Route
             index
             element={
               <ProtectedRoute>
                 <CreateChannelModal />
-                <ChannelPage />
+                <ServerJoinModal/>
               </ProtectedRoute>
             }
           />
@@ -68,10 +73,15 @@ const RouterComponent = () => {
             index
             element={
               <ProtectedRoute>
+                <ServerJoinModal/>
                 <CreateChannelModal />
                 <ChannelPage />
-                <UpdateServerModal/>
-                <InviteModal/>
+                <UpdateServerModal />
+                <InviteModal />
+                <LeaveServerModal />
+                <DeleteChannelModal />
+                <ChannelPage />
+                <DeleteServerModal />
               </ProtectedRoute>
             }
           />

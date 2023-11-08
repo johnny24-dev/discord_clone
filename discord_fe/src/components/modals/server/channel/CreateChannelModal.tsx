@@ -1,11 +1,11 @@
-import useModal from '../../hooks/useModal'
+import useModal from '../../../../hooks/useModal'
 import { Button, Flex, Modal, Select, Stack, TextInput } from '@mantine/core'
-import { useGeneralStore } from '../../stores/generateStore'
+import { useGeneralStore } from '../../../../stores/generateStore'
 import { useForm } from '@mantine/form'
-import { ChannelType, CreateChannelMutation, CreateChannelMutationVariables } from '../../gql/graphql'
-import { useServer } from '../../hooks/graphql/server/useServer'
+import { ChannelType, CreateChannelMutation, CreateChannelMutationVariables } from '../../../../gql/graphql'
+import { useServer } from '../../../../hooks/graphql/server/useServer'
 import { useMutation } from '@apollo/client'
-import { CREATE_CHANNEL } from '../../graphql/mutations/server/createChannel'
+import { CREATE_CHANNEL } from '../../../../graphql/mutations/server/createChannel'
 
 const CreateChannelModal = () => {
     const channelType = useGeneralStore((state) => state.channelTypeForCreateChannel)

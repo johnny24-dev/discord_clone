@@ -14,12 +14,11 @@ const ServerHeader = ({
 
     const isAdmin = memberRole == MemberRole.Admin
     const ismorderator = memberRole == MemberRole.Modderator || isAdmin
-
     const inviteModal = useModal('InvitePeople')
-
     const updateServerModal = useModal('UpdateServer')
-
     const createChannel = useModal('CreateChannel')
+    const leaveServerModal = useModal('LeaveServer')
+    const deleteServerModal = useModal('DeleteServer')
 
     return (
         <Menu shadow='md' width={rem(280)}>
@@ -53,11 +52,13 @@ const ServerHeader = ({
                 </Menu.Item>}
                 {ismorderator && <Divider />}
                 {isAdmin && <Menu.Item
+                    onClick={deleteServerModal.openModal}
                     color='red'
                     rightSection={<IconTrash />}>
                     <Text >Delete Server</Text>
                 </Menu.Item>}
-                {isAdmin && <Menu.Item
+                {!isAdmin && <Menu.Item
+                    onClick={leaveServerModal.openModal}
                     color='red'
                     rightSection={<IconX />}>
                     <Text >Leave Server</Text>

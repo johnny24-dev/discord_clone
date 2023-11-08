@@ -16,6 +16,7 @@ const InviteModal = () => {
     const clipBoard = useClipboard({
         timeout: 1000
     })
+    console.log("🚀 ~ file: InviteModal.tsx:19 ~ InviteModal ~ clipBoard:", clipBoard)
 
     const [updateServerWithNewInviteCodem, { error, loading }] = useMutation<UpdateServerWithNewInviteCodeMutation, UpdateServerWithNewInviteCodeMutationVariables>(UPDATE_SERVER_WITH_NEW_INVITE_CODE)
 
@@ -44,14 +45,17 @@ const InviteModal = () => {
                         label="Server Invite Code"
                         {...form.getInputProps('inviteCode')}
                         rightSection={
-                            <Button variant='transparent' onClick={clipBoard.copy}>
+                            <Button variant='transparent' onClick={() => {
+                                clipBoard.copy(form.values.inviteCode)
+
+                            }}>
                                 {!clipBoard.copied ? <IconCopy /> : <IconCheck color='green' />}
                             </Button>
                         } />
                 </Flex>
                 <Button disabled={loading} onClick={() => updateServerWithNewInviteCodem({
-                    variables:{
-                        serverId:server?.id
+                    variables: {
+                        serverId: server?.id
                     }
                 })}>Generate New Invite Code</Button>
             </Stack>

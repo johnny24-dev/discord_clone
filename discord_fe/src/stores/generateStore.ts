@@ -10,6 +10,9 @@ export type Modal =
     | "ManageMember"
     | "DeleteChannel"
     | "UpdateChannel"
+    | "LeaveServer"
+    | "DeleteServer"
+    | "ServerJoin"
 
 interface GeneralStore {
     activeModal: Modal | null

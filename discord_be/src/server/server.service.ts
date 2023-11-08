@@ -238,5 +238,82 @@ export class ServerService {
         })
     }
 
+    async addMemberToServer(inviteCode: string, email: string) {
+        const server = await this.prisma.server.findUnique({
+            where: {
+                inviteCode
+            }
+        })
+        if (!server) throw new BadRequestException('Server not found')
+        const profile = await this.prisma.profile.findUnique({
+            where: {
+                email
+            }
+        })
+        if (!profile) throw new BadRequestException('Profile not found')
+        const member = await this.prisma.member.findFirst({
+            where: {
+                profileId: profile.id,
+                severId: server.id
+            }
+        })
+        if (member) throw new BadRequestException('Member has already existed!')
+        return await this.prisma.server.update({
+            where: {
+                inviteCode
+            },
+            data: {
+                members: {
+                    create: {
+                        profileId: profile.id
+                    }
+                }
+            }
+        })
+    }
+
+    async changeMemberRole(memberId: number, role: MemberRole, email: string) {
+        const profile = await this.prisma.profile.findUnique({
+            where: {
+                email
+            }
+        })
+        if (!profile) throw new BadRequestException('Profile not found')
+        const member = await this.prisma.member.findUnique({
+            where: {
+                id: memberId,
+            }
+        })
+        if (!member) throw new BadRequestException('Member not found')
+        return await this.prisma.member.update({
+            where: {
+                id: memberId,
+                NOT: {
+                    profileId: profile.id,
+                },
+            },
+            data: {
+                role: MemberRole[role]
+            }
+        })
+    }
+
+    async deleteMember(memberId: number, email: string) {
+        const profile = await this.prisma.profile.findUnique({
+            where: {
+                email
+            }
+        })
+        if (!profile) throw new BadRequestException('Profile not found')
+        return await this.prisma.member.delete({
+            where: {
+                id: memberId,
+                NOT: {
+                    profileId: profile.id
+                }
+            }
+        })
+    }
+
 
 }

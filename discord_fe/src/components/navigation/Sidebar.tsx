@@ -37,6 +37,7 @@ const NavbarLink = ({ label, active, imageUrl, onClick }: NavbarLinkProps) => {
 const Sidebar = () => {
     const { colorScheme, toggleColorScheme } = useMantineColorScheme()
     const createServerModal = useModal("CreateServer");
+    const joinServerModal = useModal('ServerJoin');
     const { servers, loading } = useServers();
     const [active, setActive] = useState(0)
     const navigate = useNavigate()
@@ -70,7 +71,7 @@ const Sidebar = () => {
                         className={classes.link}
                         variant='subtle'
                         radius={100}
-                        onClick={() => { }}
+                        onClick={joinServerModal.openModal}
                     >
                         <IconArrowsJoin2 radius={100} />
                     </Button>
